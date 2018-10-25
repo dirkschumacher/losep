@@ -1,0 +1,18 @@
+Type: Package
+Package: losep
+Title: Test for (quasi)complete separation of binary classification problems
+Version: 0.1.0
+Author: Dirk Schumacher
+Maintainer: Dirk Schumacher <mail@dirk-schumacher.net>
+Description: Tests if a binary classiciation problem is separable using
+  linear programming.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.0
+Imports: 
+    ROI
+Suggests: 
+    testthat,
+    ROI.plugin.glpk,
+    covr
