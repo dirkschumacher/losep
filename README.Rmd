@@ -33,7 +33,7 @@ The package exports a single assertion function to test for separation.
 The linear program is solved using the `ROI` package that offeres a unified
 interface for a variety of solvers. A solver is a program (package) that can solve those linear programs.
 
-I recommend using `glpk` with `presolve=TRUE` or `lpSolve` as the original implementation. But you can also use your favorite commerical solver.
+I recommend using `glpk` or `lpSolve` as the original implementation. But you can also use your favorite commerical solver.
 
 ## Installation
 

@@ -36,9 +36,8 @@ The linear program is solved using the `ROI` package that offeres a
 unified interface for a variety of solvers. A solver is a program
 (package) that can solve those linear programs.
 
-I recommend using `glpk` with `presolve=TRUE` or `lpSolve` as the
-original implementation. But you can also use your favorite commerical
-solver.
+I recommend using `glpk` or `lpSolve` as the original implementation.
+But you can also use your favorite commerical solver.
 
 ## Installation
 
@@ -118,7 +117,7 @@ system.time(
 )
 #> Warning: glm.fit: algorithm did not converge
 #>    user  system elapsed 
-#>  16.596   4.512  23.281
+#>  14.232   3.544  18.045
 ```
 
 ``` r
@@ -126,9 +125,9 @@ system.time(
   tryCatch(assert_no_separation(model), error = print)
 )
 #> <simpleError: Seperation detected in your model in the following variables:
-#> (Intercept), x, x2, x3, x4, x5, x6, x7>
+#> (Intercept), x>
 #>    user  system elapsed 
-#>   8.900   1.799  11.764
+#>   6.293   1.145   7.678
 ```
 
 And with verbose output:
@@ -144,14 +143,14 @@ system.time(
 )
 #> <SOLVER MSG>  ----
 #> GLPK Simplex Optimizer, v4.63
-#> 1000000 rows, 8 columns, 7499845 non-zeros
-#>       0: obj =  -5.011592845e+05 inf =   1.424e+06 (567282)
-#>      22: obj =   1.855550965e-09 inf =   3.766e-10 (0)
-#> *    53: obj =   5.003326491e+05 inf =   0.000e+00 (0)
+#> 1000000 rows, 8 columns, 7498984 non-zeros
+#>       0: obj =  -4.954764365e+05 inf =   1.419e+06 (566470)
+#>      10: obj =   9.473118290e-11 inf =   2.021e-10 (0)
+#> *    44: obj =   5.010160000e+05 inf =   1.157e-09 (0)
 #> OPTIMAL LP SOLUTION FOUND
 #> <!SOLVER MSG> ----
 #>    user  system elapsed 
-#>   7.517   1.244   9.061
+#>   7.055   1.368   8.903
 ```
 
 ## Contribution and lifecycle
