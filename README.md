@@ -82,7 +82,8 @@ model <- glm(y ~ -1 + x, data = data, family = "binomial")
 
 # throws an error if the data is seperable
 tryCatch(assert_no_separation(model), error = print) #uses any compatible loaded solver
-#> <simpleError in assert_no_separation(model): could not find function "assert_no_separation">
+#> <simpleError: Seperation detected in your model in the following variables:
+#> x3>
 
 # or solve it using GLPK with the option presolve
 try(assert_no_separation(model, solver = "glpk", presolve = TRUE))
@@ -117,16 +118,17 @@ system.time(
 )
 #> Warning: glm.fit: algorithm did not converge
 #>    user  system elapsed 
-#>  14.241   3.539  18.075
+#>  16.596   4.512  23.281
 ```
 
 ``` r
 system.time(
   tryCatch(assert_no_separation(model), error = print)
 )
-#> <simpleError in assert_no_separation(model): could not find function "assert_no_separation">
+#> <simpleError: Seperation detected in your model in the following variables:
+#> (Intercept), x, x2, x3, x4, x5, x6, x7>
 #>    user  system elapsed 
-#>       0       0       0
+#>   8.900   1.799  11.764
 ```
 
 And with verbose output:
@@ -140,8 +142,16 @@ system.time(
     )
   )
 )
+#> <SOLVER MSG>  ----
+#> GLPK Simplex Optimizer, v4.63
+#> 1000000 rows, 8 columns, 7499845 non-zeros
+#>       0: obj =  -5.011592845e+05 inf =   1.424e+06 (567282)
+#>      22: obj =   1.855550965e-09 inf =   3.766e-10 (0)
+#> *    53: obj =   5.003326491e+05 inf =   0.000e+00 (0)
+#> OPTIMAL LP SOLUTION FOUND
+#> <!SOLVER MSG> ----
 #>    user  system elapsed 
-#>   0.001   0.000   0.000
+#>   7.517   1.244   9.061
 ```
 
 ## Contribution and lifecycle
