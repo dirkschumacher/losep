@@ -33,7 +33,9 @@ The package exports a single assertion function to test for separation.
 The linear program is solved using the [ROI](https://cran.r-project.org/package=ROI) package that offeres a unified
 interface for a variety of [solvers](https://cran.r-project.org/web/views/Optimization.html). A solver is a program (package) that can solve those linear programs.
 
-I recommend using `glpk` or `lpSolve` as the original implementation. But you can also use your favorite commerical solver.
+I recommend using `glpk` or `lpSolve` as the original implementation. But you can also use your favorite commerical solver. However large linear programs
+could still be difficult to solve. The complexity is probably mainly determined
+by the design matrix (i.e. #cols, #rows, sparsity).
 
 ## Installation
 
@@ -122,13 +124,14 @@ system.time(
 )
 ```
 
-And with verbose output:
+And with verbose output and an additional solver option:
 
 ```{r}
 system.time(
   try(
     assert_no_separation(model,
       solver = "glpk",
+      presolve = TRUE,
       verbose = TRUE
     )
   )

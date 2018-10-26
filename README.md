@@ -39,7 +39,10 @@ unified interface for a variety of
 solver is a program (package) that can solve those linear programs.
 
 I recommend using `glpk` or `lpSolve` as the original implementation.
-But you can also use your favorite commerical solver.
+But you can also use your favorite commerical solver. However large
+linear programs could still be difficult to solve. The complexity is
+probably mainly determined by the design matrix (i.e. \#cols, \#rows,
+sparsity).
 
 ## Installation
 
@@ -86,10 +89,10 @@ data <- data.frame(
 
 model <- glm(y ~ -1 + x, data = data, family = "binomial")
 
-# throws an error if the data is seperable 
+# throws an error if the data is seperable
 # uses any compatible loaded solver
 tryCatch(assert_no_separation(model), error = print)
-#> <simpleError: Seperation detected in your model in the following variables:
+#> <simpleError: Separation detected in your model in the following variables:
 #> x3>
 
 # or solve it using GLPK with the option presolve
@@ -125,40 +128,49 @@ system.time(
 )
 #> Warning: glm.fit: algorithm did not converge
 #>    user  system elapsed 
-#>  14.029   4.104  18.348
+#>  14.189   4.073  18.577
 ```
 
 ``` r
 system.time(
   tryCatch(assert_no_separation(model), error = print)
 )
-#> <simpleError: Seperation detected in your model in the following variables:
-#> (Intercept), x, x2, x3, x4, x5, x6, x7>
+#> <simpleError: Separation detected in your model in the following variables:
+#> x>
 #>    user  system elapsed 
-#>   5.603   1.140   6.828
+#>   4.225   1.182   5.504
 ```
 
-And with verbose output:
+And with verbose output and an additional solver option:
 
 ``` r
 system.time(
   try(
     assert_no_separation(model,
       solver = "glpk",
+      presolve = TRUE,
       verbose = TRUE
     )
   )
 )
 #> <SOLVER MSG>  ----
 #> GLPK Simplex Optimizer, v4.63
-#> 1000000 rows, 8 columns, 7500225 non-zeros
-#>       0: obj =  -5.031113624e+05 inf =   1.424e+06 (567093)
-#>      15: obj =   1.174922393e-09 inf =   5.798e-10 (0)
-#> *    38: obj =   5.003097684e+05 inf =   0.000e+00 (0)
+#> 1000000 rows, 8 columns, 7501187 non-zeros
+#> Preprocessing...
+#> 1000000 rows, 8 columns, 7501187 non-zeros
+#> Scaling...
+#>  A: min|aij| =  8.058e-08  max|aij| =  5.907e+00  ratio =  7.331e+07
+#> GM: min|aij| =  4.881e-04  max|aij| =  2.049e+03  ratio =  4.197e+06
+#> EQ: min|aij| =  2.396e-07  max|aij| =  1.000e+00  ratio =  4.174e+06
+#> Constructing initial basis...
+#> Size of triangular part is 1000000
+#>       0: obj =  -5.041263702e+05 inf =   1.089e+06 (567952)
+#>      19: obj =  -3.326207789e-09 inf =   4.472e-09 (0)
+#> *    32: obj =   5.011870000e+05 inf =   8.320e-10 (0)
 #> OPTIMAL LP SOLUTION FOUND
 #> <!SOLVER MSG> ----
 #>    user  system elapsed 
-#>   6.581   1.136   8.784
+#>   9.491   1.731  11.498
 ```
 
 ## Contribution and lifecycle

@@ -111,7 +111,7 @@ assert_no_separation.glm <- function(model, solver = "auto", ...) {
   has_seperation <- any(non_zero)
 
   if (has_seperation) {
-    stop("Seperation detected in your model in the following variables:\n",
+    stop("Separation detected in your model in the following variables:\n",
       paste0(names(result$solution)[non_zero], collapse = ", "),
       call. = FALSE
     )
