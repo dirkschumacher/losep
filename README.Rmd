@@ -30,8 +30,8 @@ When complete separation is present among the sample points, iterative procedure
 However, when quasicomplete  separation is  present  among  the  sample  points, the  iterative  procedures  for  maximizing  the likelihood tend to satisfy their convergence criterion before revealing any indication of separation.
 
 The package exports a single assertion function to test for separation.
-The linear program is solved using the `ROI` package that offeres a unified
-interface for a variety of solvers. A solver is a program (package) that can solve those linear programs.
+The linear program is solved using the [ROI](https://cran.r-project.org/package=ROI) package that offeres a unified
+interface for a variety of [solvers](https://cran.r-project.org/web/views/Optimization.html). A solver is a program (package) that can solve those linear programs.
 
 I recommend using `glpk` or `lpSolve` as the original implementation. But you can also use your favorite commerical solver.
 
@@ -79,7 +79,8 @@ data <- data.frame(
 model <- glm(y ~ -1 + x, data = data, family = "binomial")
 
 # throws an error if the data is seperable
-tryCatch(assert_no_separation(model), error = print) #uses any compatible loaded solver
+# uses any compatible loaded solver
+tryCatch(assert_no_separation(model), error = print)
 
 # or solve it using GLPK with the option presolve
 try(assert_no_separation(model, solver = "glpk", presolve = TRUE))
@@ -150,6 +151,6 @@ I am not good at naming things.
 
 1: Konis, K. (2007). Linear programming algorithms for detecting separated data in binary logistic regression models. Ph. D. thesis, University of Oxford.
 
-The author of the method implemented the algorithm in the package `safeBinaryRegression`.
+The author of the method implemented the algorithm in the very useful package [safeBinaryRegression](https://cran.r-project.org/package=safeBinaryRegression).
 The package overloads the `glm` function and adds a test for separation to it.
-I wanted to decouple the test from `glm` and potentially use it with other inputs as well.
+This package aims at decoupling the test from `glm` and potentially use it with other inputs as well.

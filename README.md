@@ -32,9 +32,11 @@ To cite the author of this method \[1\]:
 > separation.
 
 The package exports a single assertion function to test for separation.
-The linear program is solved using the `ROI` package that offeres a
-unified interface for a variety of solvers. A solver is a program
-(package) that can solve those linear programs.
+The linear program is solved using the
+[ROI](https://cran.r-project.org/package=ROI) package that offeres a
+unified interface for a variety of
+[solvers](https://cran.r-project.org/web/views/Optimization.html). A
+solver is a program (package) that can solve those linear programs.
 
 I recommend using `glpk` or `lpSolve` as the original implementation.
 But you can also use your favorite commerical solver.
@@ -84,8 +86,9 @@ data <- data.frame(
 
 model <- glm(y ~ -1 + x, data = data, family = "binomial")
 
-# throws an error if the data is seperable
-tryCatch(assert_no_separation(model), error = print) #uses any compatible loaded solver
+# throws an error if the data is seperable 
+# uses any compatible loaded solver
+tryCatch(assert_no_separation(model), error = print)
 #> <simpleError: Seperation detected in your model in the following variables:
 #> x3>
 
@@ -122,7 +125,7 @@ system.time(
 )
 #> Warning: glm.fit: algorithm did not converge
 #>    user  system elapsed 
-#>  15.253   4.628  20.438
+#>  14.029   4.104  18.348
 ```
 
 ``` r
@@ -130,9 +133,9 @@ system.time(
   tryCatch(assert_no_separation(model), error = print)
 )
 #> <simpleError: Seperation detected in your model in the following variables:
-#> (Intercept), x>
+#> (Intercept), x, x2, x3, x4, x5, x6, x7>
 #>    user  system elapsed 
-#>   5.858   1.259   7.387
+#>   5.603   1.140   6.828
 ```
 
 And with verbose output:
@@ -148,14 +151,14 @@ system.time(
 )
 #> <SOLVER MSG>  ----
 #> GLPK Simplex Optimizer, v4.63
-#> 1000000 rows, 8 columns, 7499502 non-zeros
-#>       0: obj =  -5.013916119e+05 inf =   1.422e+06 (567034)
-#>      10: obj =   3.615722211e-11 inf =   1.718e-10 (0)
-#> *    36: obj =   5.004980000e+05 inf =   5.215e-10 (0)
+#> 1000000 rows, 8 columns, 7500225 non-zeros
+#>       0: obj =  -5.031113624e+05 inf =   1.424e+06 (567093)
+#>      15: obj =   1.174922393e-09 inf =   5.798e-10 (0)
+#> *    38: obj =   5.003097684e+05 inf =   0.000e+00 (0)
 #> OPTIMAL LP SOLUTION FOUND
 #> <!SOLVER MSG> ----
 #>    user  system elapsed 
-#>   5.704   1.132   6.988
+#>   6.581   1.136   8.784
 ```
 
 ## Contribution and lifecycle
@@ -176,7 +179,9 @@ I am not good at naming things.
 separated data in binary logistic regression models. Ph. D. thesis,
 University of Oxford.
 
-The author of the method implemented the algorithm in the package
-`safeBinaryRegression`. The package overloads the `glm` function and
-adds a test for separation to it. I wanted to decouple the test from
-`glm` and potentially use it with other inputs as well.
+The author of the method implemented the algorithm in the very useful
+package
+[safeBinaryRegression](https://cran.r-project.org/package=safeBinaryRegression).
+The package overloads the `glm` function and adds a test for separation
+to it. This package aims at decoupling the test from `glm` and
+potentially use it with other inputs as well.
