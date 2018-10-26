@@ -128,7 +128,7 @@ system.time(
 )
 #> Warning: glm.fit: algorithm did not converge
 #>    user  system elapsed 
-#>  14.189   4.073  18.577
+#>  16.607   4.913  25.590
 ```
 
 ``` r
@@ -138,10 +138,10 @@ system.time(
 #> <simpleError: Separation detected in your model in the following variables:
 #> x>
 #>    user  system elapsed 
-#>   4.225   1.182   5.504
+#>   5.895   1.427   9.920
 ```
 
-And with verbose output and an additional solver option:
+And with verbose output and an additional solver option (presolve):
 
 ``` r
 system.time(
@@ -155,22 +155,22 @@ system.time(
 )
 #> <SOLVER MSG>  ----
 #> GLPK Simplex Optimizer, v4.63
-#> 1000000 rows, 8 columns, 7501187 non-zeros
+#> 1000000 rows, 8 columns, 7500907 non-zeros
 #> Preprocessing...
-#> 1000000 rows, 8 columns, 7501187 non-zeros
+#> 1000000 rows, 8 columns, 7500907 non-zeros
 #> Scaling...
-#>  A: min|aij| =  8.058e-08  max|aij| =  5.907e+00  ratio =  7.331e+07
-#> GM: min|aij| =  4.881e-04  max|aij| =  2.049e+03  ratio =  4.197e+06
-#> EQ: min|aij| =  2.396e-07  max|aij| =  1.000e+00  ratio =  4.174e+06
+#>  A: min|aij| =  1.918e-07  max|aij| =  5.890e+00  ratio =  3.072e+07
+#> GM: min|aij| =  5.494e-04  max|aij| =  1.820e+03  ratio =  3.313e+06
+#> EQ: min|aij| =  3.300e-07  max|aij| =  1.000e+00  ratio =  3.031e+06
 #> Constructing initial basis...
 #> Size of triangular part is 1000000
-#>       0: obj =  -5.041263702e+05 inf =   1.089e+06 (567952)
-#>      19: obj =  -3.326207789e-09 inf =   4.472e-09 (0)
-#> *    32: obj =   5.011870000e+05 inf =   8.320e-10 (0)
+#>       0: obj =  -5.043174664e+05 inf =   1.100e+06 (567963)
+#>      10: obj =   9.505182388e-11 inf =   8.539e-10 (0)
+#> *    22: obj =   5.009070000e+05 inf =   3.358e-10 (0)
 #> OPTIMAL LP SOLUTION FOUND
 #> <!SOLVER MSG> ----
 #>    user  system elapsed 
-#>   9.491   1.731  11.498
+#>   9.213   1.815  11.524
 ```
 
 ## Contribution and lifecycle

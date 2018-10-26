@@ -124,7 +124,7 @@ system.time(
 )
 ```
 
-And with verbose output and an additional solver option:
+And with verbose output and an additional solver option (presolve):
 
 ```{r}
 system.time(
