@@ -41,12 +41,14 @@ But you can also use your favorite commerical solver.
 
 ## Installation
 
-You ~~can install~~ the released version of losep from
+~~You can install the released version of losep from~~
 [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
 install.packages("losep")
 ```
+
+Or from Github:
 
 ``` r
 remotes::install_github("dirkschumacher/losep")
@@ -60,6 +62,9 @@ As part of your analysis, just add `assert_no_separation` after the
 model fit to test for separation.
 
 ``` r
+...
+ # make sure at least one solver is loaded that can handle linear programs
+library(ROI.plugin.glpk)
 ...
 my_model <- glm(formula, data, family = "binomial")
 assert_no_separation(my_model) # this uses a default solver (works in most cases)
@@ -117,7 +122,7 @@ system.time(
 )
 #> Warning: glm.fit: algorithm did not converge
 #>    user  system elapsed 
-#>  14.232   3.544  18.045
+#>  15.253   4.628  20.438
 ```
 
 ``` r
@@ -127,7 +132,7 @@ system.time(
 #> <simpleError: Seperation detected in your model in the following variables:
 #> (Intercept), x>
 #>    user  system elapsed 
-#>   6.293   1.145   7.678
+#>   5.858   1.259   7.387
 ```
 
 And with verbose output:
@@ -143,14 +148,14 @@ system.time(
 )
 #> <SOLVER MSG>  ----
 #> GLPK Simplex Optimizer, v4.63
-#> 1000000 rows, 8 columns, 7498984 non-zeros
-#>       0: obj =  -4.954764365e+05 inf =   1.419e+06 (566470)
-#>      10: obj =   9.473118290e-11 inf =   2.021e-10 (0)
-#> *    44: obj =   5.010160000e+05 inf =   1.157e-09 (0)
+#> 1000000 rows, 8 columns, 7499502 non-zeros
+#>       0: obj =  -5.013916119e+05 inf =   1.422e+06 (567034)
+#>      10: obj =   3.615722211e-11 inf =   1.718e-10 (0)
+#> *    36: obj =   5.004980000e+05 inf =   5.215e-10 (0)
 #> OPTIMAL LP SOLUTION FOUND
 #> <!SOLVER MSG> ----
 #>    user  system elapsed 
-#>   7.055   1.368   8.903
+#>   5.704   1.132   6.988
 ```
 
 ## Contribution and lifecycle

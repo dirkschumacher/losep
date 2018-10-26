@@ -36,15 +36,17 @@
 #' Linear programming algorithms for detecting separated data in binary logistic
 #' regression models. Ph. D. thesis, University of Oxford.
 #' @export
-assert_no_separation <- function (model, solver, ...) {
+assert_no_separation <- function(model, solver, ...) {
   UseMethod("assert_no_separation")
 }
 
 #' @export
-assert_no_separation.glm <- function (model, solver = "auto", ...) {
+assert_no_separation.glm <- function(model, solver = "auto", ...) {
   if (!identical(model$family$family, "binomial")) {
-    warning("Only Generalized Linear Models with family 'binomial' are supported",
-            call. = FALSE)
+    warning("Only Generalized Linear Models with family 'binomial'",
+            " are supported",
+      call. = FALSE
+    )
     return(TRUE)
   }
 
@@ -52,39 +54,49 @@ assert_no_separation.glm <- function (model, solver = "auto", ...) {
 
   # just to be safe
   unique_classes <- unique(response)
-  stopifnot(length(unique_classes) == 2L,
-            all(as.integer(unique_classes) %in% c(0L, 1L)))
+  stopifnot(
+    is.numeric(unique_classes),
+    length(unique_classes) == 2L,
+    all(unique_classes %in% c(0, 1))
+  )
   X <- stats::model.matrix(model$terms, model$model, model$contrasts)
 
   # the model here is based on Konis (2007), chapter 4. In particular
   # sections 4.2, 4.4.3 and 4.4.4
 
+  # build the ROI model
+
   # transform the model matrix so that all constraints are >=
+  # that should also work with floats
   response[response == 0] <- -1
   X_bar <- X * response
 
   m <- ncol(X_bar)
   n <- nrow(X_bar)
 
-  # build the ROI model
   constraints <- ROI::L_constraint(X_bar, rep.int(">=", n), rep.int(0, n))
 
-  bounds <- ROI::V_bound(li = seq_len(m), lb = rep.int(-1, m),
-                         ui = seq_len(m), ub = rep.int(1, m))
+  bounds <- ROI::V_bound(
+    li = seq_len(m), lb = rep.int(-1, m),
+    ui = seq_len(m), ub = rep.int(1, m)
+  )
 
   # max t(rep.int(1, n)) %*% X_bar %*% beta = colSums(X_bar) %*% beta
   # subject to X_bar >= 0
   # beta between -1 and 1
   opt_model <- ROI::OP(colSums(X_bar),
-                       constraints,
-                       bounds = bounds,
-                       maximum = TRUE)
+    constraints,
+    bounds = bounds,
+    maximum = TRUE
+  )
 
   available_solvers <- ROI::ROI_applicable_solvers(opt_model)
   if (!is.character(available_solvers) && length(available_solvers) == 0L) {
-    stop("No ROI solver plugin loaded for linear programs. ",
-         "We recommend using ROI.plugin.glpk. ",
-         "Simply type library(ROI.plugin.gpk).")
+    stop(
+      "No ROI solver plugin loaded for linear programs. ",
+      "We recommend using ROI.plugin.glpk. ",
+      "Simply type library(ROI.plugin.gpk)."
+    )
   }
 
   # if the LP is unbounded, seperation exists. Otherwise an optiomal solution
@@ -100,8 +112,9 @@ assert_no_separation.glm <- function (model, solver = "auto", ...) {
 
   if (has_seperation) {
     stop("Seperation detected in your model in the following variables:\n",
-         paste0(names(result$solution)[non_zero], collapse = ", "),
-         call. = FALSE)
+      paste0(names(result$solution)[non_zero], collapse = ", "),
+      call. = FALSE
+    )
   }
   invisible(TRUE)
 }

@@ -37,11 +37,13 @@ I recommend using `glpk` or `lpSolve` as the original implementation. But you ca
 
 ## Installation
 
-You ~~can install~~ the released version of losep from [CRAN](https://CRAN.R-project.org) with:
+~~You can install the released version of losep from~~ [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
 install.packages("losep")
 ```
+
+Or from Github:
 
 ```{r, eval=FALSE}
 remotes::install_github("dirkschumacher/losep")
@@ -55,6 +57,9 @@ remotes::install_github("dirkschumacher/losep")
 As part of your analysis, just add `assert_no_separation` after the model fit
 to test for separation.
 ```{r, eval=FALSE}
+...
+ # make sure at least one solver is loaded that can handle linear programs
+library(ROI.plugin.glpk)
 ...
 my_model <- glm(formula, data, family = "binomial")
 assert_no_separation(my_model) # this uses a default solver (works in most cases)
