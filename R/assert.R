@@ -95,7 +95,7 @@ assert_no_separation.glm <- function(model, solver = "auto", ...) {
     stop(
       "No ROI solver plugin loaded for linear programs. ",
       "We recommend using ROI.plugin.glpk. ",
-      "Simply type library(ROI.plugin.gpk)."
+      "Simply type library(ROI.plugin.gpk) before using this function."
     )
   }
 
