@@ -13,7 +13,7 @@ status](https://codecov.io/gh/dirkschumacher/losep/branch/master/graph/badge.svg
 [![CRAN
 status](https://www.r-pkg.org/badges/version/losep)](https://cran.r-project.org/package=losep)
 
-Detect linear separation in binary classification problems using linear
+Detect separation in binary classification problems using linear
 programming.
 
 To cite the author of this method \[1\]:
