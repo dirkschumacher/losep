@@ -4,10 +4,33 @@ language: R
 sudo: false
 cache: packages
 
+matrix:
+  include:
+    - r: release
+      os: linux
+      env: R_CODECOV=true
+    - r: release
+      os: osx
+    - r: oldrel
+      os: linux
+    - r: oldrel
+      os: osx
+    - r: devel
+      os: linux
+    - r: devel
+      os: osx
+
 addons:
   apt:
     packages:
       - libglpk-dev
 
+warnings_are_errors: true
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
+
 after_success:
-  - Rscript -e 'covr::codecov()
+- if [[ "${R_CODECOV}" ]]; then R -e 'covr::codecov()'; fi
