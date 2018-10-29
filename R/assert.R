@@ -86,6 +86,7 @@ assert_no_separation.glm <- function(model, solver = "auto", ...) {
   # beta between -1 and 1
   opt_model <- ROI::OP(colSums(X_bar),
     constraints,
+    types = rep.int("C", m),
     bounds = bounds,
     maximum = TRUE
   )
@@ -95,7 +96,7 @@ assert_no_separation.glm <- function(model, solver = "auto", ...) {
     stop(
       "No ROI solver plugin loaded for linear programs. ",
       "We recommend using ROI.plugin.glpk. ",
-      "Simply type library(ROI.plugin.gpk) before using this function."
+      "Simply type library(ROI.plugin.glpk) before using this function."
     )
   }
 
@@ -107,7 +108,8 @@ assert_no_separation.glm <- function(model, solver = "auto", ...) {
   stopifnot(identical(as.integer(result$status$code), 0L))
 
   # compare to 0 zero with tolerance
-  non_zero <- abs(result$solution) > sqrt(.Machine$double.eps)
+  solution <- ROI::solution(result, "primal")
+  non_zero <- abs(solution) > sqrt(.Machine$double.eps)
   has_seperation <- any(non_zero)
 
   if (has_seperation) {
