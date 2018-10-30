@@ -31,6 +31,16 @@ test_that("returns true if no separation", {
   expect_true(result)
 })
 
+test_that("wors with logicals", {
+  data <- data.frame(
+    x = factor(c(1, 1, 1, 2, 2, 2, 3, 3)),
+    y = c(1, 0, 1, 1, 1, 0, 1, 0) == 1
+  )
+  model <- glm(y ~ x, data = data, family = "binomial")
+  expect_silent(result <- assert_no_separation(model))
+  expect_true(result)
+})
+
 test_that("detects quasi separation", {
   data <- data.frame(
     x = factor(c(1, 1, 1, 2, 2, 2, 3, 3)),

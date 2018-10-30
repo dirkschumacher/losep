@@ -50,7 +50,7 @@ assert_no_separation.glm <- function(model, solver = "auto", ...) {
     return(TRUE)
   }
 
-  response <- stats::model.response(model$model, "any")
+  response <- stats::model.response(model$model, "numeric")
 
   # just to be safe
   unique_classes <- unique(response)
