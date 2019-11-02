@@ -4,15 +4,29 @@
 #' @param solver a length 1 character vector to control which solvers is used
 #' to solve the underlying linear program. Please see the \code{ROI} package
 #' for a list of available solvers.
-#' @param ... passed as parameters to \code{ROI_solve}
+#' @param ... passed as parameters to \code{ROI_solve}.
 #'
-#' The function throws an error if separation is detected. Otherwise it returns
+#' @description
+#' The function throws an error if separation for binary classification problems
+#' is detected and thus the non-existence of the maximum likelihood estimate. Otherwise it returns
 #' TRUE invisibly.
 #'
-#' The function formulates a linear programming (LP) model and solves it using
+#' @details
+#'
+#' It formulates a linear programming (LP) model and solves it using
 #' the \code{ROI} package. The \code{ROI} package offers a unified interface
 #' towards a range of linear programming solvers (i.e. specialized packages to
 #' solve LPs.).
+#'
+#' The rational is best described by quoting Kjell Konis (2007) directly:
+#'
+#' > The parameter estimates of a binary logistic regression model fit using the method of maximum likelihood sometimes do not converge to finite values.
+#'
+#' > This phenomenon (also  known  as monotone  likelihood or infinite  parameters) occurs  because  of  a condition among the sample points known as separation.  There are two classes of separation.
+#'
+#' > When complete separation is present among the sample points, iterative procedures for maximizing the likelihood tend to break down, when it would be clear that there is a problem with the model.
+#'
+#' > However, when quasicomplete  separation is  present  among  the  sample  points, the  iterative  procedures  for  maximizing  the likelihood tend to satisfy their convergence criterion before revealing any indication of separation.
 #'
 #'
 #' @examples
@@ -31,7 +45,7 @@
 #' try(assert_no_separation(model, solver = "glpk", presolve = TRUE))
 #'
 #' @references
-#' Konis, K. (2007).
+#' Kjell Konis (2007).
 #' Linear programming algorithms for detecting separated data in binary logistic
 #' regression models. Ph. D. thesis, University of Oxford.
 #'
@@ -39,6 +53,9 @@
 #' Regression. R package version 0.1-3.
 #' https://CRAN.R-project.org/package=safeBinaryRegression
 #'
+#' Kurt Hornik, David Meyer, Florian Schwendinger and Stefan Theussl (2019).
+#' ROI: R Optimization Infrastructure. R package version 0.3-2.
+#' https://CRAN.R-project.org/package=ROI
 #' @export
 assert_no_separation <- function(model, solver, ...) {
   UseMethod("assert_no_separation")
@@ -51,7 +68,7 @@ assert_no_separation.glm <- function(model, solver = "auto", ...) {
             " are supported",
       call. = FALSE
     )
-    return(TRUE)
+    return(invisible(TRUE))
   }
 
   response <- stats::model.response(model$model, "numeric")

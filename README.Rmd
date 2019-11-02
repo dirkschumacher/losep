@@ -146,7 +146,7 @@ losep = logistic regression, separation
 
 ## References and related work
 
-1: Konis, K. (2007). Linear programming algorithms for detecting separated data in binary logistic regression models. Ph. D. thesis, University of Oxford.
+1: Kjell Konis (2007). Linear programming algorithms for detecting separated data in binary logistic regression models. Ph. D. thesis, University of Oxford.
 
 The author of the method implemented the algorithm in the very useful package [safeBinaryRegression](https://cran.r-project.org/package=safeBinaryRegression).
 The package overloads the `glm` function and adds a test for separation to it.

@@ -4,8 +4,8 @@ Title: Test for (quasi)-complete separation of binary classification problems
 Version: 0.1.0.9000
 Author: Dirk Schumacher
 Maintainer: Dirk Schumacher <mail@dirk-schumacher.net>
-Description: Tests if a binary classiciation problem is separable using
-  linear programming.
+Description: Tests for the existence of the maximum likelihood estimate
+ in binary classification problems (glm with family "binomial").
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
