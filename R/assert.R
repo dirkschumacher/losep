@@ -1,4 +1,4 @@
-#' Assert no (quasi) separation binary classifcation model
+#' Assert no (quasi) separation for binary classifcation model
 #'
 #' @param model the classiciation model
 #' @param solver a length 1 character vector to control which solvers is used
@@ -7,7 +7,7 @@
 #' @param ... passed as parameters to \code{ROI_solve}
 #'
 #' The function throws an error if separation is detected. Otherwise it returns
-#' false invisibly.
+#' TRUE invisibly.
 #'
 #' The function formulates a linear programming (LP) model and solves it using
 #' the \code{ROI} package. The \code{ROI} package offers a unified interface
@@ -16,7 +16,6 @@
 #'
 #'
 #' @examples
-#' \dontrun{
 #' library(ROI.plugin.glpk)
 #' data <- data.frame(
 #'   x = factor(c(1, 1, 1, 2, 2, 2, 3, 3)),
@@ -26,15 +25,20 @@
 #' model <- glm(y ~ -1 + x, data = data, family = "binomial")
 #'
 #' # throws an error if the data is separable
-#' assert_no_separation(model) #uses any compatible loaded solver
+#' try(assert_no_separation(model)) #uses any compatible loaded solver
 #'
 #' # or solve it using GLPK with the option presolve
-#' assert_no_separation(model, solver = "glpk", presolve = TRUE)
-#' }
+#' try(assert_no_separation(model, solver = "glpk", presolve = TRUE))
+#'
 #' @references
 #' Konis, K. (2007).
 #' Linear programming algorithms for detecting separated data in binary logistic
 #' regression models. Ph. D. thesis, University of Oxford.
+#'
+#' Kjell Konis (2013). safeBinaryRegression: Safe Binary
+#' Regression. R package version 0.1-3.
+#' https://CRAN.R-project.org/package=safeBinaryRegression
+#'
 #' @export
 assert_no_separation <- function(model, solver, ...) {
   UseMethod("assert_no_separation")
@@ -67,7 +71,7 @@ assert_no_separation.glm <- function(model, solver = "auto", ...) {
   # build the ROI model
 
   # transform the model matrix so that all constraints are >=
-  # that should also work with floats
+  # that should also work with doubles
   response[response == 0] <- -1
   X_bar <- X * response
 
@@ -84,8 +88,9 @@ assert_no_separation.glm <- function(model, solver = "auto", ...) {
   # max t(rep.int(1, n)) %*% X_bar %*% beta = colSums(X_bar) %*% beta
   # subject to X_bar >= 0
   # beta between -1 and 1
-  opt_model <- ROI::OP(colSums(X_bar),
-    constraints,
+  opt_model <- ROI::OP(
+    objective = colSums(X_bar),
+    constraints = constraints,
     types = rep.int("C", m),
     bounds = bounds,
     maximum = TRUE
@@ -110,10 +115,10 @@ assert_no_separation.glm <- function(model, solver = "auto", ...) {
   # compare to 0 zero with tolerance
   solution <- ROI::solution(result, "primal")
   non_zero <- abs(solution) > sqrt(.Machine$double.eps)
-  has_seperation <- any(non_zero)
+  has_seperation <- any(non_zero, na.rm = TRUE)
 
   if (has_seperation) {
-    stop("Separation detected in your model in the following variables:\n",
+    stop("Separation detected in your model among following variables:\n",
       paste0(names(result$solution)[non_zero], collapse = ", "),
       call. = FALSE
     )

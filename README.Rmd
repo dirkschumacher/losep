@@ -34,8 +34,7 @@ The linear program is solved using the [ROI](https://cran.r-project.org/package=
 interface for a variety of [solvers](https://cran.r-project.org/web/views/Optimization.html). A solver is a program (package) that can solve those linear programs.
 
 I recommend using `glpk` or `lpSolve` as the original implementation. But you can also use your favorite commerical solver. However large linear programs
-could still be difficult to solve. The complexity is probably mainly determined
-by the design matrix (i.e. #cols, #rows, sparsity).
+could still be difficult to solve. The complexity is probably mainly determined by the design matrix (i.e. #cols, #rows, sparsity).
 
 ## Installation
 
@@ -56,8 +55,7 @@ remotes::install_github("dirkschumacher/losep")
 
 `losep` can help you detect separation before bad things happen. 
 
-As part of your analysis, just add `assert_no_separation` after the model fit
-to test for separation.
+As part of your analysis, just add `assert_no_separation` after the model fit to test for separation.
 ```{r, eval=FALSE}
 ...
  # make sure at least one solver is loaded that can handle linear programs
@@ -91,11 +89,9 @@ try(assert_no_separation(model, solver = "glpk", presolve = TRUE))
 
 ## What is the overhead?
 
-According to Konis (2007): not a lot. The linear program involves no integer
-variables and should be feasible for fairly large models.
+According to Konis (2007): not a lot. The linear program involves no integer variables and should be feasible for fairly large models.
 
-Here is a test with 10^6 observations. Fitting the glm takes longer than solving
-the LP with glpk.
+Here is a test with 10^6 observations. Fitting the glm takes longer than solving the LP with glpk.
 
 ```{r}
 library(losep)
@@ -140,7 +136,7 @@ system.time(
 
 ## Contribution and lifecycle
 
-This is the very first version. If you find any bugs or have further ideas, please let me know. 
+If you find any bugs or have further ideas, please let me know. 
 Either by writing an issue, sending a PR or an email. 
 Before you send a PR, please post an issue first.
 
@@ -148,12 +144,10 @@ Before you send a PR, please post an issue first.
 
 losep = logistic regression, separation
 
-I am not good at naming things.
-
 ## References and related work
 
 1: Konis, K. (2007). Linear programming algorithms for detecting separated data in binary logistic regression models. Ph. D. thesis, University of Oxford.
 
 The author of the method implemented the algorithm in the very useful package [safeBinaryRegression](https://cran.r-project.org/package=safeBinaryRegression).
 The package overloads the `glm` function and adds a test for separation to it.
-This package aims at decoupling the test from `glm` and potentially use it with other inputs as well.
+This package aims at decoupling the test from `glm` and potentially to use it with other inputs as well.

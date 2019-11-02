@@ -2,7 +2,7 @@
 % Please edit documentation in R/assert.R
 \name{assert_no_separation}
 \alias{assert_no_separation}
-\title{Assert no (quasi) separation binary classifcation model}
+\title{Assert no (quasi) separation for binary classifcation model}
 \usage{
 assert_no_separation(model, solver, ...)
 }
@@ -16,7 +16,7 @@ for a list of available solvers.}
 \item{...}{passed as parameters to \code{ROI_solve}
 
 The function throws an error if separation is detected. Otherwise it returns
-false invisibly.
+TRUE invisibly.
 
 The function formulates a linear programming (LP) model and solves it using
 the \code{ROI} package. The \code{ROI} package offers a unified interface
@@ -24,10 +24,9 @@ towards a range of linear programming solvers (i.e. specialized packages to
 solve LPs.).}
 }
 \description{
-Assert no (quasi) separation binary classifcation model
+Assert no (quasi) separation for binary classifcation model
 }
 \examples{
-\dontrun{
 library(ROI.plugin.glpk)
 data <- data.frame(
   x = factor(c(1, 1, 1, 2, 2, 2, 3, 3)),
@@ -37,14 +36,18 @@ data <- data.frame(
 model <- glm(y ~ -1 + x, data = data, family = "binomial")
 
 # throws an error if the data is separable
-assert_no_separation(model) #uses any compatible loaded solver
+try(assert_no_separation(model)) #uses any compatible loaded solver
 
 # or solve it using GLPK with the option presolve
-assert_no_separation(model, solver = "glpk", presolve = TRUE)
-}
+try(assert_no_separation(model, solver = "glpk", presolve = TRUE))
+
 }
 \references{
 Konis, K. (2007).
 Linear programming algorithms for detecting separated data in binary logistic
 regression models. Ph. D. thesis, University of Oxford.
+
+Kjell Konis (2013). safeBinaryRegression: Safe Binary
+Regression. R package version 0.1-3.
+https://CRAN.R-project.org/package=safeBinaryRegression
 }
