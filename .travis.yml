@@ -13,12 +13,8 @@ matrix:
       os: osx
     - r: oldrel
       os: linux
-    - r: oldrel
-      os: osx
     - r: devel
       os: linux
-    - r: devel
-      os: osx
 
 addons:
   apt:
