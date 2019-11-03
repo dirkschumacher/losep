@@ -1,7 +1,7 @@
 Type: Package
 Package: losep
 Title: Test for (quasi)-complete separation of binary classification problems
-Version: 0.1.0.9000
+Version: 0.1.0
 Author: Dirk Schumacher
 Maintainer: Dirk Schumacher <mail@dirk-schumacher.net>
 Description: Tests for the existence of the maximum likelihood estimate

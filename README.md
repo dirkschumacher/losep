@@ -13,7 +13,7 @@ status](https://codecov.io/gh/dirkschumacher/losep/branch/master/graph/badge.svg
 [![CRAN
 status](https://www.r-pkg.org/badges/version/losep)](https://cran.r-project.org/package=losep)
 
-Detect separation in binary classification problems using linear
+Detect linear separation in binary classification problems using linear
 programming.
 
 To cite the author of this method \[1\]:
@@ -41,7 +41,7 @@ solver is a program (package) that can solve those linear programs.
 I recommend using `glpk` or `lpSolve` as the original implementation.
 But you can also use your favorite commerical solver. However large
 linear programs could still be difficult to solve. The complexity is
-probably mainly determined by the design matrix (i.e. \#cols, \#rows,
+probably mainly determined by the design matrix (i.e. \#cols, \#rows,
 sparsity).
 
 ## Installation
@@ -92,11 +92,13 @@ model <- glm(y ~ -1 + x, data = data, family = "binomial")
 # throws an error if the data is seperable
 # uses any compatible loaded solver
 tryCatch(assert_no_separation(model), error = print)
-#> <simpleError: Separation detected in your model in the following variables:
+#> <simpleError: Separation detected in your model among following variables:
 #> x3>
 
 # or solve it using GLPK with the option presolve
 try(assert_no_separation(model, solver = "glpk", presolve = TRUE))
+#> Error : Separation detected in your model among following variables:
+#> x3
 ```
 
 ## What is the overhead?
@@ -128,17 +130,17 @@ system.time(
 )
 #> Warning: glm.fit: algorithm did not converge
 #>    user  system elapsed 
-#>  16.607   4.913  25.590
+#>  15.428   4.741  20.740
 ```
 
 ``` r
 system.time(
   tryCatch(assert_no_separation(model), error = print)
 )
-#> <simpleError: Separation detected in your model in the following variables:
-#> x>
+#> <simpleError: Separation detected in your model among following variables:
+#> (Intercept), x>
 #>    user  system elapsed 
-#>   5.895   1.427   9.920
+#>   6.119   1.503   7.909
 ```
 
 And with verbose output and an additional solver option (presolve):
@@ -154,40 +156,40 @@ system.time(
   )
 )
 #> <SOLVER MSG>  ----
-#> GLPK Simplex Optimizer, v4.63
-#> 1000000 rows, 8 columns, 7500907 non-zeros
+#> GLPK Simplex Optimizer, v4.65
+#> 1000000 rows, 8 columns, 7499219 non-zeros
 #> Preprocessing...
-#> 1000000 rows, 8 columns, 7500907 non-zeros
+#> 1000000 rows, 8 columns, 7499219 non-zeros
 #> Scaling...
-#>  A: min|aij| =  1.918e-07  max|aij| =  5.890e+00  ratio =  3.072e+07
-#> GM: min|aij| =  5.494e-04  max|aij| =  1.820e+03  ratio =  3.313e+06
-#> EQ: min|aij| =  3.300e-07  max|aij| =  1.000e+00  ratio =  3.031e+06
+#>  A: min|aij| =  2.770e-08  max|aij| =  5.080e+00  ratio =  1.834e+08
+#> GM: min|aij| =  3.447e-04  max|aij| =  2.901e+03  ratio =  8.418e+06
+#> EQ: min|aij| =  1.188e-07  max|aij| =  1.000e+00  ratio =  8.418e+06
 #> Constructing initial basis...
 #> Size of triangular part is 1000000
-#>       0: obj =  -5.043174664e+05 inf =   1.100e+06 (567963)
-#>      10: obj =   9.505182388e-11 inf =   8.539e-10 (0)
-#> *    22: obj =   5.009070000e+05 inf =   3.358e-10 (0)
+#>       0: obj =  -4.988989672e+05 inf =   9.205e+05 (567126)
+#>      17: obj =   2.075943591e-09 inf =   2.766e-09 (0)
+#> *    59: obj =   5.007810000e+05 inf =   2.947e-09 (0)
 #> OPTIMAL LP SOLUTION FOUND
 #> <!SOLVER MSG> ----
+#> Error : Separation detected in your model among following variables:
+#> (Intercept), x
 #>    user  system elapsed 
-#>   9.213   1.815  11.524
+#>  12.746   2.315  15.707
 ```
 
 ## Contribution and lifecycle
 
-This is the very first version. If you find any bugs or have further
-ideas, please let me know. Either by writing an issue, sending a PR or
-an email. Before you send a PR, please post an issue first.
+If you find any bugs or have further ideas, please let me know. Either
+by writing an issue, sending a PR or an email. Before you send a PR,
+please post an issue first.
 
 ## Why losep?
 
 losep = logistic regression, separation
 
-I am not good at naming things.
-
 ## References and related work
 
-1: Konis, K. (2007). Linear programming algorithms for detecting
+1: Kjell Konis (2007). Linear programming algorithms for detecting
 separated data in binary logistic regression models. Ph. D. thesis,
 University of Oxford.
 
@@ -196,4 +198,4 @@ package
 [safeBinaryRegression](https://cran.r-project.org/package=safeBinaryRegression).
 The package overloads the `glm` function and adds a test for separation
 to it. This package aims at decoupling the test from `glm` and
-potentially use it with other inputs as well.
+potentially to use it with other inputs as well.
